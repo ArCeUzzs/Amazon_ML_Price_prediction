@@ -13,10 +13,7 @@
 ---
 
 # 🚀 Smart Product Pricing | ML Challenge 2025
-
-### 👥 Team **CSK_007**
-> **Vivek Kumhar**, **Sudeep Kumar Routray**, **Ayushman Tiwari**, **Vardan Sharma**  
-📅 *Submission Date:* **13-10-2025**
+*
 
 ---
 
