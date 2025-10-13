@@ -53,14 +53,14 @@ Dataset: **75 000+ samples** containing text (`catalog_content`), image links, a
 ### 🧠 2.2 Solution Pipeline
 
 ```mermaid
-graph TD;
+graph TD
     A[Text Data] --> B[BERT Encoder]
-    B --> F[Text Embeddings (768D)]
-    C[Image Data] --> D[CLIP ViT-B/32 Encoder]
-    D --> G[Image Embeddings (512D)]
-    E[Numerical Features] --> H[StandardScaler]
+    B --> F[Text Embeddings 768D]
+    C[Image Data] --> D[CLIP ViT-B32 Encoder]
+    D --> G[Image Embeddings 512D]
+    E[Numerical Features] --> H[Standard Scaler]
     F --> I[Feature Fusion]
     G --> I
     H --> I
     I --> J[LightGBM Regressor]
-    J --> K[Predicted log1p(Price)]
+    J --> K[Predicted log1p Price]
