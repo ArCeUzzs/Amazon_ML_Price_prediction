@@ -1,21 +1,66 @@
-1. Executive Summary
-This report details a multimodal price prediction solution developed for the ML Challenge 2025. Our approach integrates fine-tuned text embeddings from a BERT model and image embeddings from a CLIP ViT-B/32 model, augmented with engineered numerical features. These multimodal features are processed by a LightGBM regressor trained with a 5-fold cross-validation strategy. The resulting model is robust and stable, achieving a cross-validation Symmetric Mean Absolute Percentage Error (SMAPE) of 30.81% and a Mean Absolute Error (MAE) of approximately $6.74 on the original price scale.
-2. Methodology
-2.1 Problem Analysis and Feature Engineering
-The task involved predicting product prices using a dataset of 75,000 training samples, each containing product catalog content, an image link, and a price. Exploratory Data Analysis (EDA) revealed key patterns:
-• Target Distribution: The price variable was highly right-skewed. We applied log1p transformation for stability. • Textual Data: Catalog content contained brand names and quantities, offering strong predictive signals. • Image Data: Product images provided complementary visual cues but were noisy when used alone. • Numerical Features: Features such as total_weight_g, pack_qty, and pieces were extracted using regex.
-2.2 Solution Pipeline
-Our hybrid architecture combines deep learning encoders and a gradient boosting regressor: 1. Text Embedding: Fine-tuned BERT for catalog_content producing 768D embeddings. 2. Image Embedding: CLIP ViT-B/32 encoder fine-tuned for visual similarity, producing 512D embeddings. 3. Feature Fusion: Weighted concatenation (Text: 0.6, Image: 0.32, Numerical: 0.08). 4. Regression: LightGBM trained on fused features with 5-fold CV, predicting log1p(price).
-3. Model Architecture Details
-3.1 Text Pipeline
-Encoder: bert-base-uncased, fine-tuned for price regression. Preprocessing: Lowercasing with minimal cleaning. Tokenization: Max length 128. Embedding: [CLS] token representation (768D).
-3.2 Image Pipeline
-Encoder: open_clip ViT-B/32 fine-tuned on product domain. Preprocessing: Standard CLIP transformations. Fallback: White image for missing data. Embedding: 512D vector extracted reliably in chunks.
-3.3 Numerical Feature Pipeline
-Features: Extracted using regex (total_weight_g, pack_qty, pieces, percent_value). Scaling: StandardScaler applied for magnitude consistency.
-3.4 Final Regression Model
-Model: LightGBM Regressor on log1p(price). Cross-Validation: 5-fold, stratified by price quantiles. Key Parameters: learning_rate=0.05, num_leaves=127, min_data_in_leaf=50, feature_fraction=0.8, bagging_fraction=0.8.
-4. Performance and Results
-The model achieved consistent 5-fold CV results: • Overall SMAPE: 30.81% • Overall MAE: $6.74 (on original scale) • Fold SMAPE: 30.73%, 30.79%, 30.87%, 31.04%, 30.63% The SMAPE standard deviation of 0.14% indicates excellent stability and generalization.
-5. Conclusion
-We developed a reproducible, multimodal pipeline combining text, image, and numerical data for price prediction. By fine-tuning domain-specific encoders and fusing their representations for LightGBM regression, we achieved a stable SMAPE of 30.8%. Future work can explore advanced multimodal fusion and richer numerical feature extraction.
+<!-- -------------------------------------------------- -->
+<!-- 🎯 SMART PRODUCT PRICING | ML CHALLENGE 2025 -->
+<!-- -------------------------------------------------- -->
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Challenge-ML_Challenge_2025-blue?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/Model-LightGBM-success?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/Language-Python-yellow?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/Framework-HuggingFace-orange?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/Encoder-BERT%20%7C%20CLIP-green?style=for-the-badge"/>
+</p>
+
+---
+
+# 🚀 Smart Product Pricing | ML Challenge 2025
+
+---
+
+## 🧾 Executive Summary
+
+This project introduces a **multimodal product price prediction system** for **ML Challenge 2025**.
+
+Our solution integrates:
+- 📝 **Text embeddings** from a fine-tuned **BERT model**
+- 🖼️ **Image embeddings** from a fine-tuned **CLIP ViT-B/32**
+- 🔢 **Engineered numerical features**
+
+All these features are **fused and processed** using a **LightGBM regressor** with **5-fold cross-validation**, achieving robust and generalizable results.
+
+📊 **Key Metrics**
+
+| Metric | Score |
+|:-------:|:------:|
+| **SMAPE** | 30.81 % |
+| **MAE (original scale)** | \$6.74 |
+
+---
+
+## ⚙️ Methodology
+
+### 🔍 2.1 Problem Analysis & Feature Engineering
+
+Dataset: **75 000+ samples** containing text (`catalog_content`), image links, and prices.  
+
+**EDA Findings:**
+- 🎯 **Target Distribution:** Highly right-skewed → applied `log1p(price)` transformation.  
+- 🧠 **Textual Data:** Contained strong brand and quantity indicators.  
+- 🖼️ **Image Data:** Added valuable but noisy visual cues (size/packaging).  
+- 🔢 **Numerical Features:** Extracted fields such as `total_weight_g`, `pack_qty`, and `pieces` via regex.
+
+---
+
+### 🧠 2.2 Solution Pipeline
+
+```mermaid
+graph TD;
+    A[Text Data] --> B[BERT Encoder]
+    B --> F[Text Embeddings (768D)]
+    C[Image Data] --> D[CLIP ViT-B/32 Encoder]
+    D --> G[Image Embeddings (512D)]
+    E[Numerical Features] --> H[StandardScaler]
+    F --> I[Feature Fusion]
+    G --> I
+    H --> I
+    I --> J[LightGBM Regressor]
+    J --> K[Predicted log1p(Price)]
