@@ -22,10 +22,10 @@
 In today’s e-commerce landscape, accurately estimating product prices is critical for maintaining competitive advantage.  
 The **ML Challenge 2025** tasked participants with predicting product prices using **multimodal data** — combining **textual product descriptions**, **images**, and **structured numerical features**.
 
+
 I have developed a robust and reproducible **multimodal price prediction pipeline** that leverages the strengths of **language models, vision encoders, and classical machine learning**.  
 This system efficiently learns semantic, visual, and quantitative signals to generate reliable price estimates even in the presence of noisy or missing data.
 I achieved a **rank of 327 out of over 85000** participating teams
----
 
 ## 🧾 Executive Summary
 
